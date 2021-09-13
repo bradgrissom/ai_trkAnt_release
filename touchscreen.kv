@@ -1,0 +1,224 @@
+#:kivy 1.4
+
+# Define your background color Template
+<BackgroundColor@Widget>
+    background_color: 1, 1, 1, 1
+    canvas.before:
+        Color:
+            rgba: root.background_color
+        Rectangle:
+            size: self.size
+            pos: self.pos
+
+# Now you can simply Mix the `BackgroundColor` class with almost
+# any other widget... to give it a background.
+<BackgroundLabel@Label+BackgroundColor>
+    background_color: 0, 0, 0, 0
+
+
+<AirborneTouchscreen>:
+    tab_pos: 'bottom_left'
+    do_default_tab: False
+    objP_panOffset:      id_panOffset
+    objP_tiltOffset:     id_tiltOffset
+    objP_magDecOffset:   id_magDec
+    objP_mavLinkStat:    id_mavLinkStat
+    objP_flaskStat:      id_flaskStat
+    objP_current_time:   id_current_time
+    objP_last_telemetry: id_last_telemetry
+    objP_program_status: id_program_status
+    objP_remote_lat:     id_remote_lat
+    objP_remote_lon:     id_remote_lon
+    objP_remote_alt:     id_remote_alt
+    objP_heading:        id_heading
+    objP_tilt:           id_tilt
+    objP_distance:       id_distance
+    objP_last_baseGPS:   id_last_baseGPS
+    objP_antennaCurrent: id_antennaCurrent
+
+    TabbedPanelItem:
+        text: 'Status'
+        on_press: root.flskStatusGetAll()
+        BoxLayout:
+            orientation: 'vertical'
+            BoxLayout:
+                BoxLayout:
+                    orientation: 'vertical'
+                    BoxLayout:
+                        BackgroundLabel:
+                            text: 'Telemetry\n(MAVLink/NMEA)'
+                            id: id_mavLinkStat
+                            bold: True
+                            color: 0, 0, 0, 1
+                            background_color: 0, 0, 1, 1
+                        BackgroundLabel:
+                            text: 'Config Server'
+                            id: id_flaskStat
+                            bold: True
+                            color: 0, 0, 0, 1
+                            background_color: 0, 0, 1, 1
+                    BoxLayout:
+                        BackgroundLabel:
+                            text: 'Status'
+                        BackgroundLabel:
+                            id: id_program_status
+                            text: 'No connect'
+                    BoxLayout:
+                        BackgroundLabel:
+                            text: 'Time'
+                        BackgroundLabel:
+                            id: id_current_time
+                            text: 'No connect'
+                    BoxLayout:
+                        BackgroundLabel:
+                            text: 'Last Telemetry'
+                        BackgroundLabel:
+                            id: id_last_telemetry
+                            text: 'No connect'
+                    BackgroundLabel:
+                        size_hint_y: 2
+                        id: id_last_baseGPS
+                        text: 'Basestation GPS'
+                        color: 0, 0, 0, 1
+                        background_color: 0, 0, 1, 1
+                BoxLayout:
+                    orientation: 'vertical'
+                    BoxLayout:
+                        BackgroundLabel:
+                            text: 'Air Lat'
+                        BackgroundLabel:
+                            id: id_remote_lat
+                            text: 'No connect'
+                    BoxLayout:
+                        BackgroundLabel:
+                            text: 'Air Lon'
+                        BackgroundLabel:
+                            id: id_remote_lon
+                            text: 'No connect'
+                    BoxLayout:
+                        BackgroundLabel:
+                            text: 'Air Alt'
+                        BackgroundLabel:
+                            id: id_remote_alt
+                            text: 'No connect'
+                    BoxLayout:
+                        BackgroundLabel:
+                            text: 'Heading'
+                        BackgroundLabel:
+                            id: id_heading
+                            text: 'No connect'
+                    BoxLayout:
+                        BackgroundLabel:
+                            text: 'Tilt'
+                        BackgroundLabel:
+                            id: id_tilt
+                            text: 'No connect'
+                    BoxLayout:
+                        BackgroundLabel:
+                            text: 'Distance'
+                        BackgroundLabel:
+                            id: id_distance
+                            text: 'No connect'
+                    BackgroundLabel:
+                        id: id_antennaCurrent
+                        text: 'Current Antenna'
+                        color: 0, 0, 0, 1
+                        background_color: 0, 0, 1, 1
+    TabbedPanelItem:
+        text: 'Pan Offset'
+        on_press: root.flskCfgGetPan()
+        BoxLayout:
+            BoxLayout:
+                Label:
+                    font_size: '30sp'
+                    bold: True
+                    id: id_panOffset
+                    text: 'No connection'
+            BoxLayout:
+                orientation: 'vertical'
+                BoxLayout:
+                    Button:
+                        text: '+10'
+                        on_press: root.panInc(10)
+                    Button:
+                        text: '+1'
+                        on_press: root.panInc(1)
+                    Button:
+                        text: '+0.1'
+                        on_press: root.panInc(0.1)
+                BoxLayout:
+                    Button:
+                        text: '-10'
+                        on_press: root.panInc(-10)
+                    Button:
+                        text: '-1'
+                        on_press: root.panInc(-1)
+                    Button:
+                        text: '-0.1'
+                        on_press: root.panInc(-0.1)
+    TabbedPanelItem:
+        text: 'Tilt Offset'
+        on_press: root.flskCfgGetTilt()
+        BoxLayout:
+            Label:
+                font_size: '30sp'
+                bold: True
+                id: id_tiltOffset
+                text: 'No connection'
+            BoxLayout:
+                orientation: 'vertical'
+                BoxLayout:
+                    Button:
+                        text: '+10'
+                        on_press: root.tiltInc(10)
+                    Button:
+                        text: '+5'
+                        on_press: root.tiltInc(5)
+                    Button:
+                        text: '+0.1'
+                        on_press: root.tiltInc(0.1)
+                BoxLayout:
+                    Button:
+                        text: '-10'
+                        on_press: root.tiltInc(-10)
+                    Button:
+                        text: '-5'
+                        on_press: root.tiltInc(-5)
+                    Button:
+                        text: '-0.1'
+                        on_press: root.tiltInc(-0.1)
+    TabbedPanelItem:
+        text: 'Compass'
+        on_press: root.flskCfgGetMag()
+        BoxLayout:
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    text: 'Magnetic Declination'
+                Label:
+                    id: id_magDec
+                    font_size: '30sp'
+                    bold: True
+                    text: 'No connection'
+            BoxLayout:
+                orientation: 'vertical'
+                BoxLayout:
+                    Button:
+                        text: '+10'
+                        on_press: root.magDecInc(10)
+                    Button:
+                        text: '+5'
+                        on_press: root.magDecInc(5)
+                    Button:
+                        text: '+0.1'
+                        on_press: root.magDecInc(0.1)
+                BoxLayout:
+                    Button:
+                        text: '-10'
+                        on_press: root.magDecInc(-10)
+                    Button:
+                        text: '-5'
+                        on_press: root.magDecInc(-5)
+                    Button:
+                        text: '-0.1'
+                        on_press: root.magDecInc(-0.1)
