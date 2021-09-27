@@ -35,6 +35,11 @@
     objP_distance:       id_distance
     objP_last_baseGPS:   id_last_baseGPS
     objP_antennaCurrent: id_antennaCurrent
+    objP_stopNetwork:      id_stopNetwork
+    objP_getIPaddress:     id_getIPaddress
+    objP_pingGithub:       id_pingGithub
+    objP_gitPull:          id_gitPull
+    objP_gitVersion:       id_gitVersion
 
     TabbedPanelItem:
         text: 'Status'
@@ -125,37 +130,48 @@
                         color: 0, 0, 0, 1
                         background_color: 0, 0, 1, 1
     TabbedPanelItem:
-        text: 'Pan Offset'
+        text: 'Pan Neutral'
         on_press: root.flskCfgGetPan()
         BoxLayout:
             BoxLayout:
+                orientation: 'vertical'
                 Label:
                     font_size: '30sp'
                     bold: True
                     id: id_panOffset
                     text: 'No connection'
+                Switch:
+                    id: panSwitch
+                Button:
+                    text: 'Stop Servo'
+                    on_press: root.doStopServos()
+                    disabled: False if panSwitch.active else True
+                Button:
+                    text: 'Start Servo'
+                    on_press: root.doStartServos()
+                    disabled: False if panSwitch.active else True
             BoxLayout:
                 orientation: 'vertical'
                 BoxLayout:
                     Button:
+                        text: '+1000'
+                        on_press: root.panInc(1000)
+                    Button:
+                        text: '+100'
+                        on_press: root.panInc(100)
+                    Button:
                         text: '+10'
                         on_press: root.panInc(10)
-                    Button:
-                        text: '+1'
-                        on_press: root.panInc(1)
-                    Button:
-                        text: '+0.1'
-                        on_press: root.panInc(0.1)
                 BoxLayout:
+                    Button:
+                        text: '-1000'
+                        on_press: root.panInc(-1000)
+                    Button:
+                        text: '-100'
+                        on_press: root.panInc(-100)
                     Button:
                         text: '-10'
                         on_press: root.panInc(-10)
-                    Button:
-                        text: '-1'
-                        on_press: root.panInc(-1)
-                    Button:
-                        text: '-0.1'
-                        on_press: root.panInc(-0.1)
     TabbedPanelItem:
         text: 'Tilt Offset'
         on_press: root.flskCfgGetTilt()
@@ -170,23 +186,23 @@
                 BoxLayout:
                     Button:
                         text: '+10'
-                        on_press: root.tiltInc(10)
+                        on_press: root.tiltInc(10*506)
                     Button:
                         text: '+5'
-                        on_press: root.tiltInc(5)
+                        on_press: root.tiltInc(5*506)
                     Button:
                         text: '+0.1'
-                        on_press: root.tiltInc(0.1)
+                        on_press: root.tiltInc(0.1*506)
                 BoxLayout:
                     Button:
                         text: '-10'
-                        on_press: root.tiltInc(-10)
+                        on_press: root.tiltInc(-10*506)
                     Button:
                         text: '-5'
-                        on_press: root.tiltInc(-5)
+                        on_press: root.tiltInc(-5*506)
                     Button:
                         text: '-0.1'
-                        on_press: root.tiltInc(-0.1)
+                        on_press: root.tiltInc(-0.1*506)
     TabbedPanelItem:
         text: 'Compass'
         on_press: root.flskCfgGetMag()
@@ -222,3 +238,64 @@
                     Button:
                         text: '-0.1'
                         on_press: root.magDecInc(-0.1)
+    TabbedPanelItem:
+        font_size: '12sp'
+        text: 'Software\nUpdate'
+        BoxLayout:
+            orientation: 'vertical'
+            BackgroundLabel:
+                id: id_stopNetwork
+                text: 'Stop Network'
+                color: 0, 0, 0, 1
+                background_color: 0.7, 0.7, 0.7, 1
+                disabled: False if dfuSwitch.active else True
+            BackgroundLabel:
+                id: id_getIPaddress
+                text: 'Get IP Address'
+                color: 0, 0, 0, 1
+                background_color: 0.8, 0.8, 0.8, 1
+                disabled: False if dfuSwitch.active else True
+            BackgroundLabel:
+                id: id_pingGithub
+                text: 'Ping Github'
+                color: 0, 0, 0, 1
+                background_color: 0.7, 0.7, 0.7, 1
+                disabled: False if dfuSwitch.active else True
+            BackgroundLabel:
+                id: id_gitPull
+                text: 'Pull from Github'
+                color: 0, 0, 0, 1
+                background_color: 0.8, 0.8, 0.8, 1
+                disabled: False if dfuSwitch.active else True
+            BoxLayout:
+                Switch:
+                    id: dfuSwitch  # Device Firmware Update Switch
+                Button:
+                    text: 'Update'
+                    on_press: root.doSoftwareUpdate()
+                    disabled: False if dfuSwitch.active else True
+                Button:
+                    text: 'Reboot'
+                    on_press: root.doReboot()
+                    disabled: False if dfuSwitch.active else True
+                Button:
+                    text: 'Shutdown'
+                    on_press: root.doShutdown()
+                    disabled: False if dfuSwitch.active else True
+            BoxLayout:
+                BackgroundLabel:
+                    id: id_gitVersion
+                    size_hint_x: 4
+                    text: 'Site: github.com/bradgrissom/ai_trkAnt_release'
+
+                    text_size: self.width, None
+                    #size_hint: 1, None
+                    height: self.texture_size[1]
+
+                    color: 0, 0, 0, 1
+                    background_color: 1, 1, 1, 1
+                Button:
+                    text: 'Get\nVersion'
+                    on_press: root.getGitVersion()
+
+
