@@ -1,0 +1,46 @@
+#!/bin/bash
+
+#-------------------------------------------------
+# Check configuration:
+#  - Make sure syslog
+#-------------------------------------------------
+
+# Notes from README.md
+#
+#        // Find large files, find big files:
+#    raspberrypi ~ ..) sudo find / -xdev -type f -size +50M | xargs ls -lhF
+#        // Try disabling rsyslog this way:
+#    $ sudo systemctl disable rsyslog.service
+#        // Then clear the giant log files:
+#    # echo > /var/log/syslog
+#    # echo > /var/log/daemon.log
+#    # reboot
+
+#   // 2021.05.25 Enable the built-in uart/serial port on a Raspberry Pi 3
+#   // The serial port is normally dedicated to managing Bluetooth, so you
+#   // have to disable bluetooth:
+#   // https://howtoraspberrypi.com/enable-port-serial-raspberry-pi/
+#   // https://www.raspberrypi.org/documentation/configuration/uart.md
+#   echo "dtoverlay=disable-bt" | sudo tee -a /boot/config.txt
+#   sudo systemctl disable hciuart
+#   sudo reboot
+#   // Serial port should then be available as /dev/serial0
+
+
+# Check to make sure its been disabled
+# Grep quietly (-q) so the output isn't shown
+systemctl status rsyslog.service | grep -q "/lib/systemd/system/rsyslog.service; disabled; vendor preset: enabled"
+if [ $? -ne 0 ]; then echo "Failed, please run sudo systemctl disable rsyslog.service"; exit; fi
+if [ $? -eq 0 ]; then echo "Correct syslog config"; fi
+
+grep -q "enable_uart=1" /boot/config.txt
+if [ $? -ne 0 ]; then echo "Failed, please edit enable_uart=1 in /boot/config.txt"; exit; fi
+if [ $? -eq 0 ]; then echo "Correct uart config"; fi
+
+grep -q "dtoverlay=disable-bt" /boot/config.txt
+if [ $? -ne 0 ]; then echo "Failed, please add dtoverlay=disable-bt to /boot/config.txt, then run sudo systemctl disable hciuart"; exit; fi
+if [ $? -eq 0 ]; then echo "Correct bluetooth config (disabled)"; fi
+
+FILE="/var/log/journal"
+if [ ! -d $FILE ]; then echo "Failed, please execute sudo mkdir $FILE"; exit; fi
+if [ -d $FILE ]; then echo "Correct found $FILE"; exit; fi

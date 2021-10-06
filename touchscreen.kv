@@ -40,6 +40,9 @@
     objP_pingGithub:       id_pingGithub
     objP_gitPull:          id_gitPull
     objP_gitVersion:       id_gitVersion
+    objP_stopServo:        id_stopServo
+    objP_startServo:       id_startServo
+    objP_gitVersionButton: id_gitVersionButton
 
     TabbedPanelItem:
         text: 'Status'
@@ -143,10 +146,12 @@
                 Switch:
                     id: panSwitch
                 Button:
+                    id: id_stopServo
                     text: 'Stop Servo'
                     on_press: root.doStopServos()
                     disabled: False if panSwitch.active else True
                 Button:
+                    id: id_startServo
                     text: 'Start Servo'
                     on_press: root.doStartServos()
                     disabled: False if panSwitch.active else True
@@ -295,6 +300,7 @@
                     color: 0, 0, 0, 1
                     background_color: 1, 1, 1, 1
                 Button:
+                    id: id_gitVersionButton
                     text: 'Get\nVersion'
                     on_press: root.getGitVersion()
 
