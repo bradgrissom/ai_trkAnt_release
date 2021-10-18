@@ -18,6 +18,7 @@
 
 <AirborneTouchscreen>:
     tab_pos: 'bottom_left'
+    tab_width: 65
     do_default_tab: False
     objP_panOffset:      id_panOffset
     objP_tiltOffset:     id_tiltOffset
@@ -43,6 +44,13 @@
     objP_stopServo:        id_stopServo
     objP_startServo:       id_startServo
     objP_gitVersionButton: id_gitVersionButton
+    objP_antSwitchDst:     id_antSwitchDst
+    objP_panTestAngle:     id_panTestAngle
+    objP_tiltTestAngle:    id_tiltTestAngle
+    objP_tmSwitch:         id_tmSwitch
+    objP_amSwitch:         id_amSwitch
+    objP_antOmni:          id_antOmni
+    objP_antDirectional:   id_antDirectional
 
     TabbedPanelItem:
         text: 'Status'
@@ -133,11 +141,13 @@
                         color: 0, 0, 0, 1
                         background_color: 0, 0, 1, 1
     TabbedPanelItem:
-        text: 'Pan Neutral'
+        text: 'Pan'
         on_press: root.flskCfgGetPan()
         BoxLayout:
             BoxLayout:
                 orientation: 'vertical'
+                Label:
+                    text: 'Pan servo neutral setting'
                 Label:
                     font_size: '30sp'
                     bold: True
@@ -177,10 +187,14 @@
                     Button:
                         text: '-10'
                         on_press: root.panInc(-10)
+
     TabbedPanelItem:
-        text: 'Tilt Offset'
+        text: 'Tilt'
         on_press: root.flskCfgGetTilt()
         BoxLayout:
+            orientation: 'vertical'
+            Label:
+                text: 'Tilt Offset'
             Label:
                 font_size: '30sp'
                 bold: True
@@ -208,6 +222,57 @@
                     Button:
                         text: '-0.1'
                         on_press: root.tiltInc(-0.1*506)
+
+    TabbedPanelItem:
+        text: 'Antenna'
+        on_press: root.flskCfgGetAnt()
+        BoxLayout:
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    text: 'Antenna Switch Distance'
+                Label:
+                    id: id_antSwitchDst
+                    text: 'default dist'
+                BoxLayout:
+                    Button:
+                        text: '+1000'
+                        on_press: root.antDstInc(1000)
+                    Button:
+                        text: '+100'
+                        on_press: root.antDstInc(100)
+                    Button:
+                        text: '+10'
+                        on_press: root.antDstInc(10)
+                BoxLayout:
+                    Button:
+                        text: '-1000'
+                        on_press: root.antDstInc(-1000)
+                    Button:
+                        text: '-100'
+                        on_press: root.antDstInc(-100)
+                    Button:
+                        text: '-10'
+                        on_press: root.antDstInc(-10)
+
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    text: 'Antenna Manual Mode'
+                Switch:
+                    id: id_amSwitch  # Antenna Mode Switch
+                BoxLayout:
+                    Button
+                        id: id_antOmni
+                        text: 'Omni\n(Antenna 1)'
+                        disabled: False if id_amSwitch.active else True
+                        on_press: root.antSelect('Omni')
+                    Button:
+                        id: id_antDirectional
+                        text: 'Directional\n(Antenna 2)'
+                        disabled: False if id_amSwitch.active else True
+                        on_press: root.antSelect('Directional')
+
     TabbedPanelItem:
         text: 'Compass'
         on_press: root.flskCfgGetMag()
@@ -243,7 +308,93 @@
                     Button:
                         text: '-0.1'
                         on_press: root.magDecInc(-0.1)
-    TabbedPanelItem:
+
+    TabbedPanelItem: # ITEM
+        text: 'Test'
+        on_press: root.flskCfgGetTestItems()
+        BoxLayout:
+            orientation: 'vertical'
+            BoxLayout:
+                size_hint_y: 0.25
+                Label:
+                    text: 'Test Mode Enabled'
+                Switch:
+                    id: id_tmSwitch # Test Mode Switch
+
+            BoxLayout:
+                BoxLayout:
+                    orientation: 'vertical'
+                    Label:
+                        text: 'Pan Test Angle'
+                        disabled: False if id_tmSwitch.active else True
+                    Label:
+                        id: id_panTestAngle
+                        text: 'default angle'
+                        disabled: False if id_tmSwitch.active else True
+                    BoxLayout:
+                        Button:
+                            text: '+50'
+                            on_press: root.panTestInc(50)
+                            disabled: False if id_tmSwitch.active else True
+                        Button:
+                            text: '+10'
+                            on_press: root.panTestInc(10)
+                            disabled: False if id_tmSwitch.active else True
+                        Button:
+                            text: '+1'
+                            on_press: root.panTestInc(1)
+                            disabled: False if id_tmSwitch.active else True
+                    BoxLayout:
+                        Button:
+                            text: '-50'
+                            on_press: root.panTestInc(-50)
+                            disabled: False if id_tmSwitch.active else True
+                        Button:
+                            text: '-10'
+                            on_press: root.panTestInc(-10)
+                            disabled: False if id_tmSwitch.active else True
+                        Button:
+                            text: '-1'
+                            on_press: root.panTestInc(-1)
+                            disabled: False if id_tmSwitch.active else True
+
+                BoxLayout:
+                    orientation: 'vertical'
+                    Label:
+                        text: 'Tilt Test Angle'
+                        disabled: False if id_tmSwitch.active else True
+                    Label:
+                        id: id_tiltTestAngle
+                        text: 'default angle'
+                        disabled: False if id_tmSwitch.active else True
+                    BoxLayout:
+                        Button:
+                            text: '+10'
+                            on_press: root.tiltTestInc(10)
+                            disabled: False if id_tmSwitch.active else True
+                        Button:
+                            text: '+5'
+                            on_press: root.tiltTestInc(5)
+                            disabled: False if id_tmSwitch.active else True
+                        Button:
+                            text: '+1'
+                            on_press: root.tiltTestInc(1)
+                            disabled: False if id_tmSwitch.active else True
+                    BoxLayout:
+                        Button:
+                            text: '-10'
+                            on_press: root.tiltTestInc(-10)
+                            disabled: False if id_tmSwitch.active else True
+                        Button:
+                            text: '-5'
+                            on_press: root.tiltTestInc(-5)
+                            disabled: False if id_tmSwitch.active else True
+                        Button:
+                            text: '-1'
+                            on_press: root.tiltTestInc(-1)
+                            disabled: False if id_tmSwitch.active else True
+
+    TabbedPanelItem: # ITEM
         font_size: '12sp'
         text: 'Software\nUpdate'
         BoxLayout:
