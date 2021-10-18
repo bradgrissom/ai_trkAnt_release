@@ -51,6 +51,7 @@
     objP_amSwitch:         id_amSwitch
     objP_antOmni:          id_antOmni
     objP_antDirectional:   id_antDirectional
+    objP_AGL:              id_AGL
 
     TabbedPanelItem:
         text: 'Status'
@@ -274,20 +275,18 @@
                         on_press: root.antSelect('Directional')
 
     TabbedPanelItem:
-        text: 'Compass'
+        text: 'Compass\nAGL'
         on_press: root.flskCfgGetMag()
         BoxLayout:
             BoxLayout:
                 orientation: 'vertical'
                 Label:
-                    text: 'Magnetic Declination'
+                    text: 'Compass\nMagnetic Declination'
                 Label:
                     id: id_magDec
                     font_size: '30sp'
                     bold: True
                     text: 'No connection'
-            BoxLayout:
-                orientation: 'vertical'
                 BoxLayout:
                     Button:
                         text: '+10'
@@ -308,6 +307,37 @@
                     Button:
                         text: '-0.1'
                         on_press: root.magDecInc(-0.1)
+
+            BoxLayout:
+                orientation: 'vertical'
+                Label:
+                    text: 'Above Ground Level\n(AGL) in meters'
+                Label:
+                    id: id_AGL
+                    font_size: '30sp'
+                    bold: True
+                    text: 'No connection'
+                BoxLayout:
+                    Button:
+                        text: '+100'
+                        on_press: root.aglInc(100)
+                    Button:
+                        text: '+10'
+                        on_press: root.aglInc(10)
+                    Button:
+                        text: '+1'
+                        on_press: root.aglInc(1)
+                BoxLayout:
+                    Button:
+                        text: '-100'
+                        on_press: root.aglInc(-100)
+                    Button:
+                        text: '-10'
+                        on_press: root.aglInc(-10)
+                    Button:
+                        text: '-1'
+                        on_press: root.aglInc(-1)
+
 
     TabbedPanelItem: # ITEM
         text: 'Test'
