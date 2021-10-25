@@ -25,6 +25,7 @@
     objP_magDecOffset:   id_magDec
     objP_mavLinkStat:    id_mavLinkStat
     objP_flaskStat:      id_flaskStat
+    objP_mainLoopStat:   id_mainLoopStat
     objP_current_time:   id_current_time
     objP_last_telemetry: id_last_telemetry
     objP_program_status: id_program_status
@@ -68,12 +69,19 @@
                             bold: True
                             color: 0, 0, 0, 1
                             background_color: 0, 0, 1, 1
-                        BackgroundLabel:
-                            text: 'Config Server'
-                            id: id_flaskStat
-                            bold: True
-                            color: 0, 0, 0, 1
-                            background_color: 0, 0, 1, 1
+                        BoxLayout:
+                            BackgroundLabel:
+                                text: 'Main'
+                                id: id_mainLoopStat
+                                bold: True
+                                color: 0, 0, 0, 1
+                                background_color: 0, 0, 1, 1
+                            BackgroundLabel:
+                                text: 'Server'
+                                id: id_flaskStat
+                                bold: True
+                                color: 0, 0, 0, 1
+                                background_color: 0, 0, 1, 1
                     BoxLayout:
                         BackgroundLabel:
                             text: 'Status'
